@@ -1,11 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { signIn } from "../../API/AuthAPI";
 import styled from "styled-components";
-import { ReactComponent as GoogleLogo } from "../../Assets/GoogleLogo.svg";
+import { loginCheck } from "../../Atom";
 import { ReactComponent as CloseIcon } from "../../Assets/CloseIcon.svg"; // CloseIcon.svg를 추가했다고 가정합니다.
+import { useRecoilState } from "recoil";
 
 const SignInPage = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const [loginState, setLoginState] = useRecoilState(loginCheck);
+
+  const navigate = useNavigate();
+
+  // signup 페이지로 이동시 로그아웃
+  useEffect(() => {
+    setLoginState(false);
+  }, []);
+
+  // 로그인 버튼 클릭 시 페이지 이동 및 로그인 상태 변수 관리
+  const handleLoginClick = async () => {
+    signIn(id, password).then((res) => {
+      setLoginState(true);
+      localStorage.setItem("accessToken", res.jwtToken.accessToken);
+      localStorage.setItem("refreshToken", res.jwtToken.refreshToken);
+      navigate("/schedule");
+    });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleLoginClick();
+    }
+  };
 
   const handleIdChange = (e) => {
     setId(e.target.value);
@@ -21,40 +48,31 @@ const SignInPage = () => {
 
   return (
     <MainDiv>
-        <Title>로그인</Title>
-        <LoginField>
-          <InputWrapper>
-            <StyledInput
-              type="text"
-              placeholder="아이디"
-              value={id}
-              onChange={handleIdChange}
-            />
-            {id && <CloseButton onClick={() => clearInput(setId)} />}
-          </InputWrapper>
-          <InputWrapper>
-            <StyledInput
-              type="password"
-              placeholder="비밀번호"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-            {password && (
-              <CloseButton onClick={() => clearInput(setPassword)} />
-            )}
-          </InputWrapper>
-          <StyledButton disabled={!id || !password}>로그인</StyledButton>
-        </LoginField>
-
-        <HrDiv>
-          <StyledHr />
-          or
-          <StyledHr />
-        </HrDiv>
-        <GoogleButton>
-          <GoogleLogo />
-          구글로 로그인
-        </GoogleButton>
+      <Title>로그인</Title>
+      <LoginField>
+        <InputWrapper>
+          <StyledInput
+            type="text"
+            placeholder="아이디"
+            value={id}
+            onChange={handleIdChange}
+          />
+          {id && <CloseButton onClick={() => clearInput(setId)} />}
+        </InputWrapper>
+        <InputWrapper>
+          <StyledInput
+            type="password"
+            placeholder="비밀번호"
+            value={password}
+            onChange={handlePasswordChange}
+            onKeyDown={handleKeyDown}
+          />
+          {password && <CloseButton onClick={() => clearInput(setPassword)} />}
+        </InputWrapper>
+        <StyledButton disabled={!id || !password} onClick={handleLoginClick}>
+          로그인
+        </StyledButton>
+      </LoginField>
     </MainDiv>
   );
 };
@@ -109,7 +127,7 @@ const StyledInput = styled.input`
   }
 
   &:focus {
-    border: 1px solid #95C25C;
+    border: 1px solid #95c25c;
   }
 `;
 
@@ -139,43 +157,6 @@ const StyledButton = styled.button`
   white-space: nowrap;
 
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
-`;
-
-const HrDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin-top: 42px;
-  gap: 9px;
-`;
-
-const StyledHr = styled.hr`
-  width: 148px;
-  background-color: #555555;
-`;
-
-const GoogleButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  box-sizing: border-box;
-  margin-top: 42px;
-
-  align-items: center;
-  justify-content: center;
-  width: 327px;
-  height: 58px;
-  padding: 20px 15px;
-  gap: 9.06px;
-  border-radius: 12px;
-  border: 1px solid black;
-  background-color: white;
-
-  font-family: Pretendard Variable;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 17.9px;
-  cursor: pointer;
 `;
 
 export default SignInPage;

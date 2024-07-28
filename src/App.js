@@ -1,13 +1,16 @@
+import { RecoilRoot } from "recoil";
 import MyRoutes from "./MyRoutes";
 import GlobalStyles from "./Style/GlobalStyles";
-import {BrowserRouter} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <GlobalStyles />
-        <MyRoutes />
+        <RecoilRoot>
+          <GlobalStyles />
+          <MyRoutes />
+        </RecoilRoot>
       </BrowserRouter>
     </>
   );

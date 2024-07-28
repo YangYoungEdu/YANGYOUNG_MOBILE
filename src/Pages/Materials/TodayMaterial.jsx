@@ -4,7 +4,7 @@ import { ReactComponent as DownloadIcon } from "../../Assets/DownloadIcon.svg";
 const TodayMaterial = () => {
   return (
     <MainDiv>
-      <div>날짜</div>
+      <DateDiv>날짜</DateDiv>
       <ItemBox>
         자료 이름
         <DownloadIcon />
@@ -19,6 +19,11 @@ const MainDiv = styled.div`
   align-items: flex-start;
   margin-top: 12px;
   width: 100%;
+`;
+
+const DateDiv = styled.div`
+  margin-top: 12px;
+  margin-bottom: 9px;
   font-family: Pretendard;
   font-size: 12px;
   font-weight: 400;
@@ -37,5 +42,10 @@ const ItemBox = styled.div`
 
   background-color: #f2f2f2;
   color: #555555;
+
+  font-family: Pretendard;
+font-size: 13px;
+font-weight: 500;
+line-height: 15.51px;
 `;
 export default TodayMaterial;

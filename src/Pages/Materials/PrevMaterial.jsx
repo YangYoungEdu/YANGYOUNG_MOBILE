@@ -22,8 +22,8 @@ const PrevMaterial = () => {
   return (
     <MainDiv>
       <Control>
-        <div>{selectedDate.toLocaleDateString()}</div>
-        <CalendarIcon onClick={toggleCalendar} />
+      <CalendarIcon onClick={toggleCalendar} />
+        <DateDiv>{selectedDate.toLocaleDateString()}</DateDiv>
       </Control>
       {showCalendar && (
         <CalendarOverlay onClick={toggleCalendar}>
@@ -64,9 +64,19 @@ const MainDiv = styled.div`
 const Control = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
+  gap: 2%;
   width: 100%;
   cursor: pointer;
+`;
+
+const DateDiv = styled.div`
+  margin-top: 12px;
+  margin-bottom: 9px;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 22px;
 `;
 
 const CalendarOverlay = styled.div`
@@ -104,6 +114,12 @@ const ItemBox = styled.div`
 
   background-color: #f2f2f2;
   color: #555555;
+
+  font-family: Pretendard;
+font-size: 13px;
+font-weight: 500;
+line-height: 15.51px;
+
 `;
 
 export default PrevMaterial;

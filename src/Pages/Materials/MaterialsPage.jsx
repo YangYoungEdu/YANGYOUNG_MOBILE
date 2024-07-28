@@ -35,6 +35,7 @@ const MaterialsPage = () => {
 
   return (
     <MainDiv>
+      <Background>
       <Controls>
         <BackArrow onClick={() => moveToPrev()} />
         <div>수업 정보</div>
@@ -59,6 +60,7 @@ const MaterialsPage = () => {
           </LectureDetailItem>
         </LectureDetail>
       </LectureInfo>
+      </Background>
 
       <MaterialTabArea>
         <MaterialTabs>
@@ -91,9 +93,18 @@ const MainDiv = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #e0e6d8;
+  padding-top: 64px;
   cursor: default;
 `;
 
+const Background = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0 24px 0 24px;
+  box-sizing: border-box;
+`;
 const Controls = styled.div`
   display: flex;
   flex-direction: row;

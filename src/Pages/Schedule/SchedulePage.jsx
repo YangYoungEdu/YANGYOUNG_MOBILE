@@ -124,7 +124,7 @@ const MainDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* padding: 0 24px 0 24px; */
+  padding-top: 64px;
   box-sizing: border-box;
   cursor: default;
 `;
@@ -148,6 +148,8 @@ const Controls = styled.div`
   align-items: center;
   width: 100%;
   margin-bottom: 20px;
+  padding: 0 24px 0 24px;
+  box-sizing: border-box;
 `;
 
 const LeftButtons = styled.div`
@@ -241,6 +243,7 @@ const LectureItem = styled.div`
   justify-content: center;
   align-items: flex-start;
   gap: 12px;
+  width: 100%;
 `;
 
 const Rect = styled.div`
@@ -269,7 +272,7 @@ const LectureBox = styled.div`
   justify-content: center;
   gap: 6px;
 
-  width: 327px;
+  width: 100%;
   height: 66px;
   padding: 16px 12px 16px 12px;
   box-sizing: border-box;

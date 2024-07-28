@@ -6,15 +6,17 @@ import { ReactComponent as BackArrow } from "../../Assets/BackArrow.svg";
 import { ReactComponent as TeacherIcon } from "../../Assets/TeacherIcon.svg";
 import { ReactComponent as LectureRoomIcon } from "../../Assets/LectureRoomIcon.svg";
 import { ReactComponent as TimeIcon } from "../../Assets/TimeIcon.svg";
+import TodayMaterial from "./TodayMaterial";
+import PrevMaterial from "./PrevMaterial";
 
 const content = [
   {
-    tab: "이번주 수업 자료",
-    content: "이번주 수업 자료 내용",
+    tab: "오늘 수업 자료",
+    content: <TodayMaterial />,
   },
   {
-    tab: "이전 수업 자료",
-    content: "이전 수업 자료 내용",
+    tab: "지난 수업 자료",
+    content: <PrevMaterial />,
   },
 ];
 
@@ -34,7 +36,7 @@ const MaterialsPage = () => {
   return (
     <MainDiv>
       <Controls>
-        <BackArrow onClick={() => moveToPrev()}/>
+        <BackArrow onClick={() => moveToPrev()} />
         <div>수업 정보</div>
         <div></div>
       </Controls>
@@ -74,10 +76,8 @@ const MaterialsPage = () => {
         <SliderContainer>
           <Slider focusedIdx={focusedIdx} />
         </SliderContainer>
-        {/* <StyledHr /> */}
-        <ContentArea>
-          <p>{currentItem.content}</p>
-        </ContentArea>
+
+        <ContentArea>{currentItem.content}</ContentArea>
       </MaterialTabArea>
     </MainDiv>
   );
@@ -150,7 +150,9 @@ const MaterialTabArea = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
-  margin-top:20px;
+  margin-top: 20px;
+  padding: 32px 29px 32px 29px;
+  box-sizing: border-box;
 `;
 
 const MaterialTabs = styled.div`
@@ -165,16 +167,12 @@ const TabButton = styled.button`
   cursor: pointer;
   transition: color 0.3s;
   color: ${(props) => (props.isSelected ? "#95C25C" : "#B5B5B5")};
+  font-weight: ${(props) => (props.isSelected ? "700" : "600")};
+
   border: none;
   background-color: rgba(0, 0, 0, 0);
   padding: 10px;
   font-size: 16px;
-`;
-
-const StyledHr = styled.hr`
-  width: 327px;
-  height: 0px;
-  border: 1px solid #b5b5b5;
 `;
 
 const SliderContainer = styled.div`
@@ -182,6 +180,7 @@ const SliderContainer = styled.div`
   width: 100%;
   height: 1px;
   background-color: #b5b5b5;
+  margin-top: 8px;
 `;
 
 const Slider = styled.div`
@@ -195,7 +194,7 @@ const Slider = styled.div`
 `;
 
 const ContentArea = styled.div`
-  padding: 20px;
+  width: 100%;
   text-align: center;
 `;
 

@@ -1,0 +1,17 @@
+import { Route, Routes } from "react-router-dom";
+import SignInPage from "./Pages/SignIn/SignInPage";
+import MaterialsPage from "./Pages/Materials/MaterialsPage";
+import SechdulePage from "./Pages/Schedule/SchedulePage";
+
+function MyRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<SignInPage />} />
+      <Route path="schedule" element={<SechdulePage />} />
+      <Route path="/material" element={<MaterialsPage />} />
+    </Routes>
+  );
+}
+
+
+export default MyRoutes;

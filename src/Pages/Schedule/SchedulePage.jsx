@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../../Assets/LeftArrow.svg";
 import { ReactComponent as RightArrow } from "../../Assets/RightArrow.svg";
-import {getDailySchedule} from "../../API/ScheduleAPI";
+import { getDailySchedule } from "../../API/ScheduleAPI";
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 const generateWeekArray = (date) => {
   const calendarYear = date.getFullYear();
@@ -38,6 +40,10 @@ const generateWeekArray = (date) => {
 const SchedulePage = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [scheduleData, setScheduleData] = useState({
+    lectureList: [],
+    taskList: [],
+  });
 
   const weekArray = generateWeekArray(currentDate);
 
@@ -60,13 +66,29 @@ const SchedulePage = () => {
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
+    const formattedDate = format(date, 'yyyy-MM-dd', { locale: ko });
+    const fetchSchedule = async () => {
+      try {
+        const response = await getDailySchedule(formattedDate);
+        setScheduleData(response);
+      } catch (error) {
+        console.error("Failed to fetch daily schedule", error);
+      }
+    };
+    fetchSchedule();
   };
 
   useEffect(() => {
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().split('T')[0]; // yyyy-mm-dd 형식으로 변환
-    const response = getDailySchedule(formattedDate);
-    console.log(response);
+    const fetchSchedule = async () => {
+      const formattedDate = format(new Date(), 'yyyy-MM-dd', { locale: ko });
+      try {
+        const response = await getDailySchedule(formattedDate);
+        setScheduleData(response);
+      } catch (error) {
+        console.error("Failed to fetch daily schedule", error);
+      }
+    };
+    fetchSchedule();
   }, []);
 
   return (
@@ -110,16 +132,18 @@ const SchedulePage = () => {
         </WeekCalendar>
       </CalendarContainer>
       <ScheduleContainer>
-        <LectureItem>
-          <TimeSlot>
-            <Rect />
-            <div>시간대</div>
-          </TimeSlot>
-          <LectureBox>
-            <div>수업 이름</div>
-            <LectureDetail>강의실 | 선생님</LectureDetail>
-          </LectureBox>
-        </LectureItem>
+        {scheduleData.lectureList.map((lecture) => (
+          <LectureItem key={lecture.id}>
+            <TimeSlot>
+              <Rect />
+              <div>{`${lecture.startTime.hour}:${lecture.startTime.minute} - ${lecture.endTime.hour}:${lecture.endTime.minute}`}</div>
+            </TimeSlot>
+            <LectureBox>
+              <div>{lecture.name}</div>
+              <LectureDetail>{`${lecture.room} | ${lecture.teacher}`}</LectureDetail>
+            </LectureBox>
+          </LectureItem>
+        ))}
       </ScheduleContainer>
     </MainDiv>
   );
@@ -139,6 +163,7 @@ const MainDiv = styled.div`
 
 const CalendarContainer = styled.div`
   width: 100%;
+  height: 30%;
 `;
 
 const Title = styled.div`

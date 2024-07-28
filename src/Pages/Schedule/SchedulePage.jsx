@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../../Assets/LeftArrow.svg";
 import { ReactComponent as RightArrow } from "../../Assets/RightArrow.svg";
+import {getDailySchedule} from "../../API/ScheduleAPI";
 
 const generateWeekArray = (date) => {
   const calendarYear = date.getFullYear();
@@ -60,6 +61,13 @@ const SchedulePage = () => {
   const handleDateClick = (date) => {
     setSelectedDate(date);
   };
+
+  useEffect(() => {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0]; // yyyy-mm-dd 형식으로 변환
+    const response = getDailySchedule(formattedDate);
+    console.log(response);
+  }, []);
 
   return (
     <MainDiv>

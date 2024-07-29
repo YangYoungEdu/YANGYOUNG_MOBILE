@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../../Assets/LeftArrow.svg";
 import { ReactComponent as RightArrow } from "../../Assets/RightArrow.svg";
 import { getDailySchedule } from "../../API/ScheduleAPI";
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 const generateWeekArray = (date) => {
   const calendarYear = date.getFullYear();
@@ -46,6 +47,11 @@ const SchedulePage = () => {
   });
 
   const weekArray = generateWeekArray(currentDate);
+  const navigate = useNavigate();
+
+  const goToLectureDetail = (lectureId) => {
+    navigate(`/schedule/${lectureId}`);
+  };
 
   const goToPreviousWeek = () => {
     const prevWeek = new Date(currentDate);
@@ -66,7 +72,7 @@ const SchedulePage = () => {
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
-    const formattedDate = format(date, 'yyyy-MM-dd', { locale: ko });
+    const formattedDate = format(date, "yyyy-MM-dd", { locale: ko });
     const fetchSchedule = async () => {
       try {
         const response = await getDailySchedule(formattedDate);
@@ -80,7 +86,7 @@ const SchedulePage = () => {
 
   useEffect(() => {
     const fetchSchedule = async () => {
-      const formattedDate = format(new Date(), 'yyyy-MM-dd', { locale: ko });
+      const formattedDate = format(new Date(), "yyyy-MM-dd", { locale: ko });
       try {
         const response = await getDailySchedule(formattedDate);
         setScheduleData(response);
@@ -138,7 +144,7 @@ const SchedulePage = () => {
               <Rect />
               <div>{`${lecture.startTime.hour}:${lecture.startTime.minute} - ${lecture.endTime.hour}:${lecture.endTime.minute}`}</div>
             </TimeSlot>
-            <LectureBox>
+            <LectureBox onClick={() => goToLectureDetail(lecture.id)}>
               <div>{lecture.name}</div>
               <LectureDetail>{`${lecture.room} | ${lecture.teacher}`}</LectureDetail>
             </LectureBox>

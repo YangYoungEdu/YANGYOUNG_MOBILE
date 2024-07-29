@@ -8,7 +8,7 @@ function MyRoutes() {
     <Routes>
       <Route path="/" element={<SignInPage />} />
       <Route path="schedule" element={<SechdulePage />} />
-      <Route path="/material" element={<MaterialsPage />} />
+      <Route path="/schedule/:id" element={<MaterialsPage />} />
     </Routes>
   );
 }

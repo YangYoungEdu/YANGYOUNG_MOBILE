@@ -104,8 +104,8 @@ const SchedulePage = () => {
                   <span></span>
                 </StyledCheckbox>
                 <Texts>
-                <div>{task.content}</div>
-                <LectureDetail>due date: {task.taskDate}</LectureDetail>
+                  <div>{task.content}</div>
+                  <LectureDetail>due date: {task.taskDate}</LectureDetail>
                 </Texts>
               </TaskBox>
             </LectureItem>
@@ -239,18 +239,19 @@ const MainDiv = styled.div`
   width: 100vw;
   position: fixed;
   top: 0;
-  /* height: 100vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
   cursor: default;
+  height: 100vh; /* 전체 화면 높이 */
+  overflow: hidden; /* 내부 스크롤을 숨깁니다 */
+
 `;
 
 const CalendarContainer = styled.div`
   width: 100%;
-  height: 30%;
 `;
 
 const Controls = styled.div`
@@ -336,19 +337,19 @@ const DateLabel = styled.div`
 `;
 
 const ScheduleContainer = styled.div`
+   flex: 1; /* 나머지 공간을 차지하게 합니다 */
   margin-top: 23px;
-  margin-bottom: 23px;
+  padding-bottom: 23px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
-  height: 100vh;
   padding: 23px 26px 23px 26px;
   background-color: #f7f7f7;
   box-sizing: border-box;
   gap: 30px;
-  overflow-y: scroll;
+  overflow-y: auto; /* 컨텐츠가 넘칠 경우 스크롤 표시 */
 `;
 
 const LectureItem = styled.div`
@@ -442,6 +443,7 @@ const MaterialTabArea = styled.div`
   flex-direction: column;
   padding: 64px 29px 32px 29px;
   box-sizing: border-box;
+  flex-shrink: 0;
 `;
 
 const MaterialTabs = styled.div`
@@ -485,6 +487,10 @@ const Slider = styled.div`
 const ContentArea = styled.div`
   width: 100%;
   text-align: center;
+  flex: 1; /* 나머지 공간을 차지하게 합니다 */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* 내부 스크롤을 숨깁니다 */
 `;
 
 const StyledCheckbox = styled.label`
@@ -534,8 +540,8 @@ const StyledCheckbox = styled.label`
 `;
 
 const Texts = styled.div`
-align-items: flex-start;
-gap: 3px;
+  align-items: flex-start;
+  gap: 3px;
 `;
 
 const TaskContent = styled.div`

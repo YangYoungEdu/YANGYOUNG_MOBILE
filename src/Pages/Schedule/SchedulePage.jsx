@@ -49,8 +49,8 @@ const SchedulePage = () => {
   const weekArray = generateWeekArray(currentDate);
   const navigate = useNavigate();
 
-  const goToLectureDetail = (lectureId) => {
-    navigate(`/schedule/${lectureId}`);
+  const goToLectureDetail = (lecture) => {
+    navigate(`/schedule/${lecture.id}`, {state:{lecture}});
   };
 
   const goToPreviousWeek = () => {
@@ -144,7 +144,7 @@ const SchedulePage = () => {
               <Rect />
               <div>{`${lecture.startTime.hour}:${lecture.startTime.minute} - ${lecture.endTime.hour}:${lecture.endTime.minute}`}</div>
             </TimeSlot>
-            <LectureBox onClick={() => goToLectureDetail(lecture.id)}>
+            <LectureBox onClick={() => goToLectureDetail(lecture)}>
               <div>{lecture.name}</div>
               <LectureDetail>{`${lecture.room} | ${lecture.teacher}`}</LectureDetail>
             </LectureBox>

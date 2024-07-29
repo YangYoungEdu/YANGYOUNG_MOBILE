@@ -8,3 +8,8 @@ export const loginCheck = atom({
   default: false,
   effects_UNSTABLE: [persistAtom],
 });
+
+// export const oneLectureState = atom({
+//   key: "oneLectureState",
+//   default:
+// });

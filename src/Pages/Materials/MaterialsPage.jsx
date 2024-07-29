@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import useTabs from "../../Custom/useTabs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../Assets/BackArrow.svg";
 import { ReactComponent as TeacherIcon } from "../../Assets/TeacherIcon.svg";
 import { ReactComponent as LectureRoomIcon } from "../../Assets/LectureRoomIcon.svg";
@@ -9,24 +9,41 @@ import { ReactComponent as TimeIcon } from "../../Assets/TimeIcon.svg";
 import TodayMaterial from "./TodayMaterial";
 import PrevMaterial from "./PrevMaterial";
 
-const content = [
-  {
-    tab: "오늘 수업 자료",
-    content: <TodayMaterial />,
-  },
-  {
-    tab: "지난 수업 자료",
-    content: <PrevMaterial />,
-  },
-];
-
 const MaterialsPage = () => {
-  const { currentItem, changeItem } = useTabs(0, content);
-  const [focusedIdx, setFocusedIdx] = React.useState(0);
+  const location = useLocation();
+  const { lecture } = location.state || {};
   const navigate = useNavigate();
+
   const moveToPrev = () => {
     navigate("/schedule");
   };
+
+  const [focusedIdx, setFocusedIdx] = useState(0);
+
+  const content = lecture
+    ? [
+        {
+          tab: "오늘 수업 자료",
+          content: (
+            <TodayMaterial
+              lectureDate={lecture.lectureDate}
+              lectureId={lecture.id}
+            />
+          ),
+        },
+        {
+          tab: "지난 수업 자료",
+          content: (
+            <PrevMaterial
+              lectureDate={lecture.lectureDate}
+              lectureId={lecture.lectureId}
+            />
+          ),
+        },
+      ]
+    : [];
+
+  const { currentItem, changeItem } = useTabs(0, content);
 
   const handleChange = (index) => {
     changeItem(index);
@@ -36,30 +53,30 @@ const MaterialsPage = () => {
   return (
     <MainDiv>
       <Background>
-      <Controls>
-        <BackArrow onClick={() => moveToPrev()} />
-        <div>수업 정보</div>
-        <div></div>
-      </Controls>
+        <Controls>
+          <BackArrow onClick={moveToPrev} />
+          <div>수업 정보</div>
+          <div></div>
+        </Controls>
 
-      <LectureInfo>
-        <Title>고1 컨설팅</Title>
-
-        <LectureDetail>
-          <LectureDetailItem>
-            <TeacherIcon />
-            선생님
-          </LectureDetailItem>
-          <LectureDetailItem>
-            <LectureRoomIcon />
-            강의실
-          </LectureDetailItem>
-          <LectureDetailItem>
-            <TimeIcon />
-            시간
-          </LectureDetailItem>
-        </LectureDetail>
-      </LectureInfo>
+        <LectureInfo>
+          <Title>{lecture.name}</Title>
+          <LectureDetail>
+            <LectureDetailItem>
+              <TeacherIcon />
+              {lecture.teacher} 선생님
+            </LectureDetailItem>
+            <LectureDetailItem>
+              <LectureRoomIcon />
+              {lecture.room || "강의실 정보 없음"}
+            </LectureDetailItem>
+            <LectureDetailItem>
+              <TimeIcon />
+              {lecture.startTime.hour}:{lecture.startTime.minute} -{" "}
+              {lecture.endTime.hour}:{lecture.endTime.minute}
+            </LectureDetailItem>
+          </LectureDetail>
+        </LectureInfo>
       </Background>
 
       <MaterialTabArea>

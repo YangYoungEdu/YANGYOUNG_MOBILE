@@ -47,6 +47,27 @@ const SchedulePage = () => {
     taskList: [],
   });
   const [focusedIdx, setFocusedIdx] = useState(0);
+
+  // 체크박스 상태 관리
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    setTasks(
+      scheduleData.taskList.map((task) => ({
+        ...task,
+        checked: false,
+      }))
+    );
+  }, [scheduleData]);
+
+  const handleCheckboxChange = (id) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, checked: !task.checked } : task
+      )
+    );
+  };
+
   const content = [
     {
       tab: "수업 스케줄",
@@ -68,12 +89,20 @@ const SchedulePage = () => {
       ),
     },
     {
-      tab: "ToDoList",
+      tab: "To Do List",
       content: (
         <ScheduleContainer>
-          {scheduleData.taskList.map((task) => (
+          {tasks.map((task) => (
             <LectureItem key={task.id}>
               <LectureBox>
+                <StyledCheckbox>
+                  <input
+                    type="checkbox"
+                    checked={task.checked}
+                    onChange={() => handleCheckboxChange(task.id)}
+                  />
+                  <span></span>
+                </StyledCheckbox>
                 <div>{task.content}</div>
               </LectureBox>
             </LectureItem>
@@ -206,7 +235,7 @@ const SchedulePage = () => {
 const MainDiv = styled.div`
   width: 100vw;
   position: fixed;
-  top:0;
+  top: 0;
   /* height: 100vh; */
   display: flex;
   flex-direction: column;
@@ -214,7 +243,6 @@ const MainDiv = styled.div`
   align-items: center;
   box-sizing: border-box;
   cursor: default;
-
 `;
 
 const CalendarContainer = styled.div`
@@ -356,9 +384,9 @@ const TimeSlot = styled.div`
 
 const LectureBox = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
   gap: 6px;
 
   width: 100%;
@@ -439,4 +467,51 @@ const ContentArea = styled.div`
   width: 100%;
   text-align: center;
 `;
+
+const StyledCheckbox = styled.label`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+    &:checked ~ span {
+      background-color: #95c25c;
+      border-color: #95c25c;
+    }
+
+    &:checked ~ span:after {
+      display: block;
+    }
+  }
+
+  span {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-color: #f1f1f1;
+    border: 2px solid #d0d0d0;
+    border-radius: 4px;
+    transition: all 0.2s;
+
+    &:after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+`;
+
 export default SchedulePage;

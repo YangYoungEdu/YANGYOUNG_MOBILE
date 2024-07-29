@@ -1,14 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "./CustomCalendar.css";
 import moment from "moment";
 import styled from "styled-components";
 import { ReactComponent as DownloadIcon } from "../../Assets/DownloadIcon.svg";
 import { ReactComponent as CalendarIcon } from "../../Assets/Calendar.svg";
+import { getDailyFile, downloadFile } from "../../API/FileAPI";
+import { format } from "date-fns";
 
-const PrevMaterial = () => {
+const PrevMaterial = ({ lectureDate, lectureId }) => {
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);  // 초기값 제거
+  const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    const fetchFileList = async () => {
+      if (selectedDate) {
+        try {
+          const formattedDate = format(selectedDate, "yyyy-MM-dd");
+          const response = await getDailyFile(lectureId, formattedDate);
+          setFileList(response);
+        } catch (error) {
+          console.error("Error fetching data", error);
+        }
+      }
+    };
+    fetchFileList();
+  }, [lectureId, selectedDate]);
+
+  const handleDownloadClick = (fileName) => {
+    return () => {
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+      downloadFile(lectureId, formattedDate, fileName);
+    };
+  };
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -21,9 +46,9 @@ const PrevMaterial = () => {
 
   return (
     <MainDiv>
-      <Control>
-      <CalendarIcon onClick={toggleCalendar} />
-        <DateDiv>{selectedDate.toLocaleDateString()}</DateDiv>
+      <Control onClick={toggleCalendar}>
+        <CalendarIcon />
+        <DateDiv>{selectedDate ? selectedDate.toLocaleDateString() : "수업 일자를 선택하세요."}</DateDiv>
       </Control>
       {showCalendar && (
         <CalendarOverlay onClick={toggleCalendar}>
@@ -31,20 +56,21 @@ const PrevMaterial = () => {
             <Calendar
               onChange={handleDateChange}
               value={selectedDate}
+              maxDate={new Date()}  // 현재 날짜까지 선택 가능
               formatDay={(locale, date) => moment(date).format("DD")}
               tileClassName={({ date, view }) =>
-                date.getTime() === selectedDate.getTime()
-                  ? "selected-date"
-                  : null
+                date.getTime() === (selectedDate ? selectedDate.getTime() : 0) ? "selected-date" : null
               }
             />
           </CalendarContainer>
         </CalendarOverlay>
       )}
-      <ItemBox>
-        자료 이름
-        <DownloadIcon />
-      </ItemBox>
+      {fileList.map((file, index) => (
+        <ItemBox key={index}>
+          {file.name}
+          <DownloadIcon onClick={handleDownloadClick(file.name)} />
+        </ItemBox>
+      ))}
     </MainDiv>
   );
 };

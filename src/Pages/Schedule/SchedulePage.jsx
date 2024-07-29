@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useTabs from "../../Custom/useTabs";
 import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../../Assets/LeftArrow.svg";
 import { ReactComponent as RightArrow } from "../../Assets/RightArrow.svg";
@@ -45,12 +46,55 @@ const SchedulePage = () => {
     lectureList: [],
     taskList: [],
   });
+  const [focusedIdx, setFocusedIdx] = useState(0);
+  const content = [
+    {
+      tab: "수업 스케줄",
+      content: (
+        <ScheduleContainer>
+          {scheduleData.lectureList.map((lecture) => (
+            <LectureItem key={lecture.id}>
+              <TimeSlot>
+                <Rect />
+                <div>{`${lecture.startTime.hour}:${lecture.startTime.minute} - ${lecture.endTime.hour}:${lecture.endTime.minute}`}</div>
+              </TimeSlot>
+              <LectureBox onClick={() => goToLectureDetail(lecture)}>
+                <div>{lecture.name}</div>
+                <LectureDetail>{`${lecture.room} | ${lecture.teacher}`}</LectureDetail>
+              </LectureBox>
+            </LectureItem>
+          ))}
+        </ScheduleContainer>
+      ),
+    },
+    {
+      tab: "ToDoList",
+      content: (
+        <ScheduleContainer>
+          {scheduleData.taskList.map((task) => (
+            <LectureItem key={task.id}>
+              <LectureBox>
+                <div>{task.content}</div>
+              </LectureBox>
+            </LectureItem>
+          ))}
+        </ScheduleContainer>
+      ),
+    },
+  ];
+
+  const { currentItem, changeItem } = useTabs(0, content);
+
+  const handleChange = (index) => {
+    changeItem(index);
+    setFocusedIdx(index);
+  };
 
   const weekArray = generateWeekArray(currentDate);
   const navigate = useNavigate();
 
   const goToLectureDetail = (lecture) => {
-    navigate(`/schedule/${lecture.id}`, {state:{lecture}});
+    navigate(`/schedule/${lecture.id}`, { state: { lecture } });
   };
 
   const goToPreviousWeek = () => {
@@ -99,7 +143,23 @@ const SchedulePage = () => {
 
   return (
     <MainDiv>
-      <Title>나의 수업 스케줄</Title>
+      <MaterialTabArea>
+        <MaterialTabs>
+          {content.map((section, index) => (
+            <TabButton
+              key={index}
+              onClick={() => handleChange(index)}
+              isSelected={index === focusedIdx}
+            >
+              {section.tab}
+            </TabButton>
+          ))}
+        </MaterialTabs>
+
+        <SliderContainer>
+          <Slider focusedIdx={focusedIdx} />
+        </SliderContainer>
+      </MaterialTabArea>
       <Controls>
         <LeftButtons>
           <WeekRange>
@@ -137,34 +197,24 @@ const SchedulePage = () => {
           ))}
         </WeekCalendar>
       </CalendarContainer>
-      <ScheduleContainer>
-        {scheduleData.lectureList.map((lecture) => (
-          <LectureItem key={lecture.id}>
-            <TimeSlot>
-              <Rect />
-              <div>{`${lecture.startTime.hour}:${lecture.startTime.minute} - ${lecture.endTime.hour}:${lecture.endTime.minute}`}</div>
-            </TimeSlot>
-            <LectureBox onClick={() => goToLectureDetail(lecture)}>
-              <div>{lecture.name}</div>
-              <LectureDetail>{`${lecture.room} | ${lecture.teacher}`}</LectureDetail>
-            </LectureBox>
-          </LectureItem>
-        ))}
-      </ScheduleContainer>
+
+      <ContentArea>{currentItem.content}</ContentArea>
     </MainDiv>
   );
 };
 
 const MainDiv = styled.div`
   width: 100vw;
-  height: 100vh;
+  position: fixed;
+  top:0;
+  /* height: 100vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 64px;
   box-sizing: border-box;
   cursor: default;
+
 `;
 
 const CalendarContainer = styled.div`
@@ -269,7 +319,7 @@ const ScheduleContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   padding: 23px 26px 23px 26px;
   background-color: #f7f7f7;
   box-sizing: border-box;
@@ -333,5 +383,60 @@ const LectureDetail = styled.div`
   line-height: 11.93px;
   text-align: left;
   color: #595959;
+`;
+
+const MaterialTabArea = styled.div`
+  width: 100%;
+  /* height: 100%; */
+  gap: 0px;
+  border-radius: 20px 20px 0px 0px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 29px 32px 29px;
+  box-sizing: border-box;
+`;
+
+const MaterialTabs = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+  position: relative;
+`;
+
+const TabButton = styled.button`
+  cursor: pointer;
+  transition: color 0.3s;
+  color: ${(props) => (props.isSelected ? "#95C25C" : "#B5B5B5")};
+  font-weight: ${(props) => (props.isSelected ? "700" : "600")};
+
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  padding: 10px;
+  font-size: 16px;
+`;
+
+const SliderContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 1px;
+  background-color: #b5b5b5;
+  margin-top: 8px;
+`;
+
+const Slider = styled.div`
+  position: absolute;
+  left: 0;
+  width: ${(props) => 100 / 2}%; /* Number of tabs */
+  height: 1.5px;
+  background-color: #95c25c;
+  transition: transform 0.3s ease;
+  transform: translateX(${(props) => props.focusedIdx * 100}%);
+`;
+
+const ContentArea = styled.div`
+  width: 100%;
+  text-align: center;
 `;
 export default SchedulePage;

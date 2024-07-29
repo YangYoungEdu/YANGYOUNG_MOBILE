@@ -94,7 +94,7 @@ const SchedulePage = () => {
         <ScheduleContainer>
           {tasks.map((task) => (
             <LectureItem key={task.id}>
-              <LectureBox>
+              <TaskBox>
                 <StyledCheckbox>
                   <input
                     type="checkbox"
@@ -103,8 +103,11 @@ const SchedulePage = () => {
                   />
                   <span></span>
                 </StyledCheckbox>
+                <Texts>
                 <div>{task.content}</div>
-              </LectureBox>
+                <LectureDetail>due date: {task.taskDate}</LectureDetail>
+                </Texts>
+              </TaskBox>
             </LectureItem>
           ))}
         </ScheduleContainer>
@@ -250,14 +253,6 @@ const CalendarContainer = styled.div`
   height: 30%;
 `;
 
-const Title = styled.div`
-  font-family: Pretendard Variable;
-  font-size: 23px;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 20px;
-`;
-
 const Controls = styled.div`
   display: flex;
   flex-direction: row;
@@ -342,6 +337,7 @@ const DateLabel = styled.div`
 
 const ScheduleContainer = styled.div`
   margin-top: 23px;
+  margin-bottom: 23px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -352,6 +348,7 @@ const ScheduleContainer = styled.div`
   background-color: #f7f7f7;
   box-sizing: border-box;
   gap: 30px;
+  overflow-y: scroll;
 `;
 
 const LectureItem = styled.div`
@@ -384,10 +381,32 @@ const TimeSlot = styled.div`
 
 const LectureBox = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+
+  width: 100%;
+  height: 66px;
+  padding: 16px 12px 16px 12px;
+  box-sizing: border-box;
+
+  border-radius: 7px;
+
+  background-color: white;
+  font-family: Pretendard;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 15.51px;
+  text-align: left;
+`;
+
+const TaskBox = styled.div`
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 6px;
+  gap: 10px;
 
   width: 100%;
   height: 66px;
@@ -421,7 +440,7 @@ const MaterialTabArea = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
-  padding: 32px 29px 32px 29px;
+  padding: 64px 29px 32px 29px;
   box-sizing: border-box;
 `;
 
@@ -514,4 +533,12 @@ const StyledCheckbox = styled.label`
   }
 `;
 
+const Texts = styled.div`
+align-items: flex-start;
+gap: 3px;
+`;
+
+const TaskContent = styled.div`
+  font-size: 15px;
+`;
 export default SchedulePage;

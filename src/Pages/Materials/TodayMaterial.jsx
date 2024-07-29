@@ -29,12 +29,16 @@ const TodayMaterial = ({ lectureDate, lectureId }) => {
   return (
     <MainDiv>
       <DateDiv>{lectureDate}</DateDiv>
-      {fileList.map((file, index) => (
-        <ItemBox key={index}>
-          {file.name}
-          <DownloadIcon onClick={handleDownloadClick(file.name)} />
-        </ItemBox>
-      ))}
+      {fileList.length > 0 ? (
+        fileList.map((file, index) => (
+          <ItemBox key={index}>
+            {file.name}
+            <DownloadIcon onClick={handleDownloadClick(file.name)} />
+          </ItemBox>
+        ))
+      ) : (
+        <ItemBox>등록된 파일이 없습니다 :{"("}</ItemBox>
+      )}
     </MainDiv>
   );
 };

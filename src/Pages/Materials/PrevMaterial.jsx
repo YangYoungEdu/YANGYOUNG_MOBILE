@@ -65,12 +65,16 @@ const PrevMaterial = ({ lectureDate, lectureId }) => {
           </CalendarContainer>
         </CalendarOverlay>
       )}
-      {fileList.map((file, index) => (
-        <ItemBox key={index}>
-          {file.name}
-          <DownloadIcon onClick={handleDownloadClick(file.name)} />
-        </ItemBox>
-      ))}
+      {fileList.length > 0 ? (
+        fileList.map((file, index) => (
+          <ItemBox key={index}>
+            {file.name}
+            <DownloadIcon onClick={handleDownloadClick(file.name)} />
+          </ItemBox>
+        ))
+      ) : (
+        <ItemBox>등록된 파일이 없습니다 :{"("}</ItemBox>
+      )}
     </MainDiv>
   );
 };
@@ -91,7 +95,7 @@ const Control = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 2%;
+  gap: 10px;
   width: 100%;
   cursor: pointer;
 `;

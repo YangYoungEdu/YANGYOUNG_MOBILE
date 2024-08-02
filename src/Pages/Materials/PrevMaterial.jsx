@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
-import "./CustomCalendar.css";
 import moment from "moment";
 import styled from "styled-components";
 import { ReactComponent as DownloadIcon } from "../../Assets/DownloadIcon.svg";

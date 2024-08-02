@@ -168,7 +168,7 @@ const Top = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 20px;
-  background: #15521d;;
+  background: #15521d;
   color: #fff;
 `;
 

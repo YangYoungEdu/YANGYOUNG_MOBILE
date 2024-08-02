@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import SignInPage from "./Pages/SignIn/SignInPage";
 import MaterialsPage from "./Pages/Materials/MaterialsPage";
 import SechdulePage from "./Pages/Schedule/SchedulePage";
@@ -12,6 +12,5 @@ function MyRoutes() {
     </Routes>
   );
 }
-
 
 export default MyRoutes;

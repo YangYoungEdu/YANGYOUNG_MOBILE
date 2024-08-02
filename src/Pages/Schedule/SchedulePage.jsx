@@ -7,6 +7,7 @@ import { ReactComponent as RightArrow } from "../../Assets/RightArrow.svg";
 import { getDailySchedule } from "../../API/ScheduleAPI";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import Layout from "../../Layout";
 
 const generateWeekArray = (date) => {
   const calendarYear = date.getFullYear();
@@ -81,7 +82,7 @@ const SchedulePage = () => {
               </TimeSlot>
               <LectureBox onClick={() => goToLectureDetail(lecture)}>
                 <div>{lecture.name}</div>
-                <LectureDetail>{`${lecture.room} | ${lecture.teacher}`}</LectureDetail>
+                <LectureDetail>{`${lecture.room} | ${lecture.teacher} 선생님`}</LectureDetail>
               </LectureBox>
             </LectureItem>
           ))}
@@ -231,6 +232,7 @@ const SchedulePage = () => {
       </CalendarContainer>
 
       <ContentArea>{currentItem.content}</ContentArea>
+      <Layout />
     </MainDiv>
   );
 };
@@ -441,7 +443,8 @@ const MaterialTabArea = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
-  padding: 64px 29px 32px 29px;
+  padding: 0 29px 32px 29px;
+  padding-top: 7.88%;
   box-sizing: border-box;
   flex-shrink: 0;
 `;

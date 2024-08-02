@@ -6,6 +6,7 @@ import { ReactComponent as DownloadIcon } from "../../Assets/DownloadIcon.svg";
 import { ReactComponent as CalendarIcon } from "../../Assets/Calendar.svg";
 import { getDailyFile, downloadFile } from "../../API/FileAPI";
 import { format } from "date-fns";
+import "./CustomCalendar.css";
 
 const PrevMaterial = ({ lectureDate, lectureId }) => {
   const [showCalendar, setShowCalendar] = useState(false);

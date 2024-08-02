@@ -8,6 +8,7 @@ import { ReactComponent as LectureRoomIcon } from "../../Assets/LectureRoomIcon.
 import { ReactComponent as TimeIcon } from "../../Assets/TimeIcon.svg";
 import TodayMaterial from "./TodayMaterial";
 import PrevMaterial from "./PrevMaterial";
+import Layout from "../../Layout";
 
 const MaterialsPage = () => {
   const location = useLocation();
@@ -98,6 +99,7 @@ const MaterialsPage = () => {
 
         <ContentArea>{currentItem.content}</ContentArea>
       </MaterialTabArea>
+           <Layout />
     </MainDiv>
   );
 };
@@ -110,11 +112,12 @@ const MainDiv = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #e0e6d8;
-  padding-top: 64px;
+
   cursor: default;
 `;
 
 const Background = styled.div`
+  margin-top: 7.88%;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;

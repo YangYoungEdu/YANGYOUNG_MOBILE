@@ -53,7 +53,7 @@ const SignInPage = () => {
         <InputWrapper>
           <StyledInput
             type="text"
-            placeholder="아이디"
+            placeholder="이름을 입력하세요"
             value={id}
             onChange={handleIdChange}
           />
@@ -62,7 +62,7 @@ const SignInPage = () => {
         <InputWrapper>
           <StyledInput
             type="password"
-            placeholder="비밀번호"
+            placeholder="학번을 입력하세요"
             value={password}
             onChange={handlePasswordChange}
             onKeyDown={handleKeyDown}

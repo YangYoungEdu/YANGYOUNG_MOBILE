@@ -1,5 +1,6 @@
 import axios from "axios";
 
+const prod = process.env.REACT_APP_PROD_URL;
 const server = process.env.REACT_APP_DEV_URL;
 const local = process.env.REACT_APP_LOCAL_URL;
 
@@ -11,7 +12,7 @@ export const signIn = async (username, password) => {
   };
 
   try {
-    const response = await axios.post(`${server}appUser/sign-in`, data);
+    const response = await axios.post(`${prod}appUser/sign-in`, data);
     console.log("Sign in response:", response.data);
     return response.data;
   } catch (error) {
@@ -38,7 +39,7 @@ export const signOut = async () => {
   const refreshToken = localStorage.getItem("refreshToken");
 
   try {
-    const response = await axios.post(`${server}appUser/sign-out`, {
+    const response = await axios.post(`${prod}appUser/sign-out`, {
       accessToken: accessToken,
       refreshToken: refreshToken,
     });

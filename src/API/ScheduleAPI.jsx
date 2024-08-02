@@ -1,12 +1,13 @@
 import axios from "axios";
 
+const prod = process.env.REACT_APP_PROD_URL;
 const server = process.env.REACT_APP_DEV_URL;
 const local = process.env.REACT_APP_LOCAL_URL;
 
 export const getDailySchedule = async (date) => {
   console.log(date);
   try {
-    const response = await axios.get(`${server}student/schedule`, {
+    const response = await axios.get(`${prod}student/schedule`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },

@@ -1,12 +1,13 @@
 import axios from "axios";
 
+const prod = process.env.REACT_APP_PROD_URL;
 const server = process.env.REACT_APP_DEV_URL;
 const local = process.env.REACT_APP_LOCAL_URL;
 
 export const getDailyFile = async (lectureId, lectureDate) => {
   console.log(lectureId, lectureDate);
   try {
-    const response = await axios.get(`${server}file`, {
+    const response = await axios.get(`${prod}file`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
@@ -30,7 +31,7 @@ export const getDailyFile = async (lectureId, lectureDate) => {
 export const downloadFile = async (lectureId, lectureDate, fileName) => {
   console.log("download api requests: ", lectureId, lectureDate, fileName);
   try {
-    const response = await axios.get(`${server}file/download`, {
+    const response = await axios.get(`${prod}file/download`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },

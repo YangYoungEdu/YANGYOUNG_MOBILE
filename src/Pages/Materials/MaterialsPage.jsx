@@ -36,7 +36,7 @@ const MaterialsPage = () => {
           tab: "지난 수업 자료",
           content: (
             <PrevMaterial
-            lectureDate={lecture.lectureDate}
+              lectureDate={lecture.lectureDate}
               lectureId={lecture.id}
             />
           ),
@@ -99,7 +99,7 @@ const MaterialsPage = () => {
 
         <ContentArea>{currentItem.content}</ContentArea>
       </MaterialTabArea>
-           <Layout />
+      <Layout />
     </MainDiv>
   );
 };

@@ -149,7 +149,7 @@ const ItemBox = styled.div`
 font-size: 13px;
 font-weight: 500;
 line-height: 15.51px;
-
+margin-bottom: 3px;
 `;
 
 export default PrevMaterial;

@@ -150,39 +150,36 @@ const SchedulePage = () => {
     setSelectedDate(new Date());
   };
 
-  const handleDateClick = (date) => {
+
+  const handleDateClick = async (date) => {
     setSelectedDate(date);
     const formattedDate = format(date, "yyyy-MM-dd", { locale: ko });
-  
+
     if (studentId) {
-      const fetchSchedule = async () => {
-        try {
-          const response = await getDailySchedule(studentId, formattedDate);
-          setScheduleData(response);
-        } catch (error) {
-          console.error("Failed to fetch daily schedule", error);
-        }
-      };
-      fetchSchedule();
-    }
-  };
-  
-  useEffect(() => {
-    const fetchSchedule = async () => {
-      const formattedDate = format(selectedDate, "yyyy-MM-dd", { locale: ko });
       try {
         const response = await getDailySchedule(studentId, formattedDate);
         setScheduleData(response);
       } catch (error) {
         console.error("Failed to fetch daily schedule", error);
       }
-    };
-  
-    if (studentId) {
-      fetchSchedule();
     }
+  };
+  useEffect(() => {
+    const fetchSchedule = async () => {
+      const formattedDate = format(selectedDate, "yyyy-MM-dd", { locale: ko });
+      if (studentId) {
+        try {
+          const response = await getDailySchedule(studentId, formattedDate);
+          setScheduleData(response);
+        } catch (error) {
+          console.error("Failed to fetch daily schedule", error);
+        }
+      }
+    };
+
+    fetchSchedule();
   }, [studentId, selectedDate]);
-  
+
   return (
     <MainDiv>
       <MaterialTabArea>
@@ -239,9 +236,9 @@ const SchedulePage = () => {
           ))}
         </WeekCalendar>
       </CalendarContainer>
-
       <ContentArea>{currentItem.content}</ContentArea>
       <Layout />
+
     </MainDiv>
   );
 };
@@ -257,7 +254,6 @@ const MainDiv = styled.div`
   box-sizing: border-box;
   cursor: default;
   height: 100vh; /* 전체 화면 높이 */
-  overflow: hidden; /* 내부 스크롤을 숨깁니다 */
 `;
 
 const CalendarContainer = styled.div`
@@ -347,7 +343,7 @@ const DateLabel = styled.div`
 `;
 
 const ScheduleContainer = styled.div`
-  flex: 1; /* 나머지 공간을 차지하게 합니다 */
+  /* flex: 1; 나머지 공간을 차지하게 합니다 */
   margin-top: 23px;
   padding-bottom: 23px;
   display: flex;

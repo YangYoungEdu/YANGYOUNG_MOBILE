@@ -50,7 +50,7 @@ export const downloadFile = async (lectureId, lectureDate, fileName) => {
     const contentDisposition = response.headers["content-disposition"];
     const downloadFileName = contentDisposition
       ? contentDisposition.split("filename=")[1].replace(/"/g, "")
-      : "default_filename.json";
+      : fileName;
 
     const fileURL = window.URL.createObjectURL(fileBlob);
     const link = document.createElement("a");

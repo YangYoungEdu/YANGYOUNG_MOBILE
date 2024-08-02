@@ -10,7 +10,7 @@ const Nemonic = React.forwardRef(({ scheduleData }, ref) => {
         {scheduleData.student && scheduleData.student.name} ({scheduleData.student && scheduleData.student.school})
       </Top>
       <div>
-        {scheduleData.lectureList ? (
+        {scheduleData.lectureList && scheduleData.lectureList? (
           <StyledTable>
             <tbody>
               {scheduleData.lectureList.map((lecture) => (
@@ -32,7 +32,7 @@ const Nemonic = React.forwardRef(({ scheduleData }, ref) => {
         )}
       </div>
       <div>
-        {scheduleData.taskList ? (
+        {scheduleData.taskList && scheduleData.taskList ? (
           <StyledTable>
             <tbody>
               {scheduleData.taskList.map((task) => (

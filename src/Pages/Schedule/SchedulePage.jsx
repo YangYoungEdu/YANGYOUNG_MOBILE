@@ -153,20 +153,23 @@ const SchedulePage = () => {
   const handleDateClick = (date) => {
     setSelectedDate(date);
     const formattedDate = format(date, "yyyy-MM-dd", { locale: ko });
-    const fetchSchedule = async () => {
-      try {
-        const response = await getDailySchedule(formattedDate);
-        setScheduleData(response);
-      } catch (error) {
-        console.error("Failed to fetch daily schedule", error);
-      }
-    };
-    fetchSchedule();
+  
+    if (studentId) {
+      const fetchSchedule = async () => {
+        try {
+          const response = await getDailySchedule(studentId, formattedDate);
+          setScheduleData(response);
+        } catch (error) {
+          console.error("Failed to fetch daily schedule", error);
+        }
+      };
+      fetchSchedule();
+    }
   };
-
+  
   useEffect(() => {
     const fetchSchedule = async () => {
-      const formattedDate = format(new Date(), "yyyy-MM-dd", { locale: ko });
+      const formattedDate = format(selectedDate, "yyyy-MM-dd", { locale: ko });
       try {
         const response = await getDailySchedule(studentId, formattedDate);
         setScheduleData(response);
@@ -174,12 +177,12 @@ const SchedulePage = () => {
         console.error("Failed to fetch daily schedule", error);
       }
     };
+  
     if (studentId) {
-      // studentId가 유효한 경우에만 fetchSchedule 호출
       fetchSchedule();
     }
-  }, []);
-
+  }, [studentId, selectedDate]);
+  
   return (
     <MainDiv>
       <MaterialTabArea>

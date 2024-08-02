@@ -83,10 +83,10 @@ const PrintControls = ({ onClose, scheduleData, formattedDate }) => {
         <Container>
           <ButtonContainer>
             <CloseButton onClick={onClose}>닫기</CloseButton>
-            {/* <ReactToPrint
+            <ReactToPrint
               trigger={() => <CloseButton>인쇄</CloseButton>}
               content={() => componentRef.current}
-            /> */}
+            />
           </ButtonContainer>
           <Small>{`${remainingTime}초 후에 자동으로 닫힙니다.`}</Small>
           <Display>

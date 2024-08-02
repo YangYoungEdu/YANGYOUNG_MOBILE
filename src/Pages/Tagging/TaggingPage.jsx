@@ -42,10 +42,10 @@ const TaggingPage = () => {
       }
     }
   };
-
+  const formattedDate = format(new Date(), "yyyy-MM-dd", { locale: ko });
   //id를 기반으로 학생 정보 및 오늘의 정보 패치
   const fetchData = async () => {
-    const formattedDate = format(new Date(), "yyyy-MM-dd", { locale: ko });
+    
     try {
       const response = await getDailySchedule(serialNumber, formattedDate);
       setScheduleData(response);
@@ -110,6 +110,7 @@ const TaggingPage = () => {
             inputRef.current.focus();
           }}
           scheduleData={scheduleData}
+          formattedDate={formattedDate}
         ></PrintControls>
       )}
       <Img src={backImg}></Img>

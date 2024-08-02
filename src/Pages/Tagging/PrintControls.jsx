@@ -1,112 +1,106 @@
 // PrintControls.js
 import React, { useEffect, useState, useRef } from "react";
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import ReactToPrint from "react-to-print";
 import Nemonic from "./Nemonic";
 
-const PrintControls = ({ onClose, scheduleData }) => {
+const PrintControls = ({ onClose, scheduleData, formattedDate }) => {
   const componentRef = useRef();
   const taskCount = scheduleData.taskList.length;
   const [remainingTime, setRemainingTime] = useState(60);
 
   useEffect(() => {
-    console.log("componentRef", componentRef);
+    // Update the remaining time every second
     const timeoutId = setInterval(() => {
-      setRemainingTime((prevTime) => prevTime - 1);
+      setRemainingTime((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(timeoutId);
+          onClose();
+          return 0;
+        }
+        return prevTime - 1;
+      });
     }, 1000);
 
-    // Set a timeout to close the modal after 60 seconds
-    const closingTimeoutId = setTimeout(() => {
-      onClose();
-    }, 60000);
-
-    // Clear intervals and timeouts on component unmount
-    return () => {
-      clearInterval(timeoutId);
-      clearTimeout(closingTimeoutId);
-    };
+    // Clear intervals on component unmount
+    return () => clearInterval(timeoutId);
   }, [onClose]);
 
   return (
-    <>
-      <GlobalStyle />
-      <ModalWrapper>
-        <ModalContent>
-          <Top>
-            <Name>{scheduleData.student.name}</Name>
-            <Right>
-              {/* <div>{studentTodayStateValue.localDate}</div> */}
-              <div>{scheduleData.student.school}</div>
-            </Right>
-          </Top>
-          <Bottom>
-            <Section>
-              <br />
-              <Hello>
-                오늘 {scheduleData.lectureList.length}
-                개의 수업이 있습니다.
-              </Hello>
-              {scheduleData.lectureList ? (
-                <StyledTable>
-                  <tbody>
-                    {scheduleData.lectureList &&
-                      scheduleData.lectureList.map((lecture, index) => (
-                        <tr key={lecture.id}>
-                          <td key={lecture.id}>
-                            {/* {lecture.homeRoom
-                              ? `${index+1}. ${lecture.name}: 홈룸(${lecture.homeRoom}) - 강의실(${lecture.lectureRoom})`
-                              : `${index+1}. ${lecture.name} - 강의실(${lecture.lectureRoom})`} */}
+    <ModalWrapper>
+      <ModalContent>
+        <Top>
+          <Name>{scheduleData.student.name}</Name>
+          <Right>
+            <div>{formattedDate}</div>
+            <div>{scheduleData.student.school}</div>
+          </Right>
+        </Top>
+        <Bottom>
+          <Section>
+            <br />
+            <Hello>
+              오늘 {scheduleData.lectureList.length}
+              개의 수업이 있습니다.
+            </Hello>
+            {scheduleData.lectureList ? (
+              <StyledTable>
+                <tbody>
+                  {scheduleData.lectureList.map((lecture, index) => (
+                    <tr key={lecture.id}>
+                      <td>
+                        {`${lecture.name} : ${lecture.room} | ${lecture.teacher} 선생님`}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </StyledTable>
+            ) : (
+              <p>오늘 수업이 없습니다.</p>
+            )}
+          </Section>
 
-                            {`${lecture.name}`}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </StyledTable>
-              ) : (
-                <p>오늘 수업이 없습니다.</p>
-              )}
-            </Section>
-
-            <Section>
-              <Hello>
-                오늘 {taskCount}
-                개의 할 일이 있습니다.
-              </Hello>
-              {scheduleData.taskList ? (
-                <StyledTable>
-                  <tbody>
-                    {scheduleData.taskList &&
-                      scheduleData.taskList.map((task) => (
-                        <tr key={task.id}>
-                          <td>{task.content}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </StyledTable>
-              ) : (
-                <p>오늘 할 일이 없습니다.</p>
-              )}
-            </Section>
-          </Bottom>
-          <Container>
-            <ButtonContainer>
-              <CloseButton onClick={onClose}>닫기</CloseButton>
-              <ReactToPrint
-                trigger={() => <CloseButton>인쇄</CloseButton>}
-                content={() => componentRef.current}
-              />
-            </ButtonContainer>
-            <Small>{`${remainingTime}초 후에 자동으로 닫힙니다.`}</Small>
-            <Display>
-              <Nemonic scheduleData={scheduleData} ref={componentRef} />
-            </Display>
-          </Container>
-        </ModalContent>
-      </ModalWrapper>
-    </>
+          <Section>
+            <Hello>
+              오늘 {taskCount}
+              개의 할 일이 있습니다.
+            </Hello>
+            {scheduleData.taskList ? (
+              <StyledTable>
+                <tbody>
+                  {scheduleData.taskList.map((task) => (
+                    <tr key={task.id}>
+                      <td>{task.content}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </StyledTable>
+            ) : (
+              <p>오늘 할 일이 없습니다.</p>
+            )}
+          </Section>
+        </Bottom>
+        <Container>
+          <ButtonContainer>
+            <CloseButton onClick={onClose}>닫기</CloseButton>
+            {/* <ReactToPrint
+              trigger={() => <CloseButton>인쇄</CloseButton>}
+              content={() => componentRef.current}
+            /> */}
+          </ButtonContainer>
+          <Small>{`${remainingTime}초 후에 자동으로 닫힙니다.`}</Small>
+          <Display>
+            <Nemonic scheduleData={scheduleData} ref={componentRef} />
+          </Display>
+        </Container>
+      </ModalContent>
+    </ModalWrapper>
   );
 };
+
+// Styled components remain the same as in your existing code
+
+// export default PrintControls;
 
 const Display = styled.div`
   display: none;
@@ -122,6 +116,7 @@ const Container = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
+  flex-direction: row;
   gap: 20px;
 `;
 
@@ -147,17 +142,9 @@ const Small = styled.div`
   margin-bottom: 20px;
 `;
 
-const GlobalStyle = createGlobalStyle`
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Arial', sans-serif;
-}
-`;
-
 const StyledTable = styled.table`
   width: 100%;
-  font-size: 25px;
+  font-size: 20px;
   border-collapse: collapse;
   margin-top: 10px;
   td {
@@ -181,14 +168,16 @@ const Top = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 20px;
-  background: #126140;
+  background: #15521d;;
   color: #fff;
 `;
 
 const Right = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   font-size: 25px;
+  gap: 10px;
 `;
 
 const Hello = styled.div`
@@ -200,12 +189,18 @@ const Hello = styled.div`
 const Bottom = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 20px;
   width: 90%;
   margin-bottom: 20px;
 `;
 
-const Section = styled.div``;
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+`;
 
 const ModalWrapper = styled.div`
   position: fixed;

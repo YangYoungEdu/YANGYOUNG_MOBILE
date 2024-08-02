@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../../API/AuthAPI";
 import styled from "styled-components";
-import { loginCheck } from "../../Atom";
+import { loginCheck, studentIdState } from "../../Atom";
 import { ReactComponent as CloseIcon } from "../../Assets/CloseIcon.svg"; // CloseIcon.svg를 추가했다고 가정합니다.
 import { useRecoilState } from "recoil";
 
@@ -10,7 +10,7 @@ const SignInPage = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [loginState, setLoginState] = useRecoilState(loginCheck);
-
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
   const navigate = useNavigate();
 
   // signup 페이지로 이동시 로그아웃
@@ -22,9 +22,16 @@ const SignInPage = () => {
   const handleLoginClick = async () => {
     signIn(id, password).then((res) => {
       setLoginState(true);
+      setStudentId(password);
       localStorage.setItem("accessToken", res.jwtToken.accessToken);
       localStorage.setItem("refreshToken", res.jwtToken.refreshToken);
-      navigate("/schedule");
+      if (password == "admin") {
+        navigate("/tagging");
+      }
+      else {
+        navigate("/schedule");
+      }
+
     });
   };
 

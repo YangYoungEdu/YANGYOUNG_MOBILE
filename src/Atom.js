@@ -9,7 +9,13 @@ export const loginCheck = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
-// export const oneLectureState = atom({
-//   key: "oneLectureState",
-//   default:
-// });
+export const studentIdState = atom({
+  key: "studentIdState",
+  default: null,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const serialNumberState = atom({
+  key: "serialNumberState",
+  default: "",
+});

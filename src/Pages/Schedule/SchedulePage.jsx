@@ -8,6 +8,8 @@ import { getDailySchedule } from "../../API/ScheduleAPI";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import Layout from "../../Layout";
+import { studentIdState } from "../../Atom";
+import { useRecoilState } from "recoil";
 
 const generateWeekArray = (date) => {
   const calendarYear = date.getFullYear();
@@ -48,6 +50,7 @@ const SchedulePage = () => {
     taskList: [],
   });
   const [focusedIdx, setFocusedIdx] = useState(0);
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
 
   // 체크박스 상태 관리
   const [tasks, setTasks] = useState([]);
@@ -165,13 +168,16 @@ const SchedulePage = () => {
     const fetchSchedule = async () => {
       const formattedDate = format(new Date(), "yyyy-MM-dd", { locale: ko });
       try {
-        const response = await getDailySchedule(formattedDate);
+        const response = await getDailySchedule(studentId, formattedDate);
         setScheduleData(response);
       } catch (error) {
         console.error("Failed to fetch daily schedule", error);
       }
     };
-    fetchSchedule();
+    if (studentId) {
+      // studentId가 유효한 경우에만 fetchSchedule 호출
+      fetchSchedule();
+    }
   }, []);
 
   return (
@@ -249,7 +255,6 @@ const MainDiv = styled.div`
   cursor: default;
   height: 100vh; /* 전체 화면 높이 */
   overflow: hidden; /* 내부 스크롤을 숨깁니다 */
-
 `;
 
 const CalendarContainer = styled.div`
@@ -339,7 +344,7 @@ const DateLabel = styled.div`
 `;
 
 const ScheduleContainer = styled.div`
-   flex: 1; /* 나머지 공간을 차지하게 합니다 */
+  flex: 1; /* 나머지 공간을 차지하게 합니다 */
   margin-top: 23px;
   padding-bottom: 23px;
   display: flex;
